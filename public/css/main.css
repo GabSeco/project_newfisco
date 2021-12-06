@@ -166,10 +166,16 @@ p, a, h1, h2, h3, h4, h5, h6, label, button{
   font-weight: 800;
   width: 170px!important;
   height: 50px!important;
-  background: white!important;
-  color: #ca408b;
+  background: #ca408b!important;
+  color: white;
   border: 1px solid #ca408b!important;
   box-shadow: rgb(0 0 0 / 16%) 0px 10px 36px 0px, rgb(0 0 0 / 6%) 0px 0px 0px 1px;
+}
+
+.btnCadastro:hover,.btnCadastro:active,.btnCadastro:focus{
+  background: #c71f7b!important;
+  color: white!important;
+  border: 1px solid #c71f7b!important;
 }
 
 

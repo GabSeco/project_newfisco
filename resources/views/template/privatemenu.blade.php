@@ -17,6 +17,8 @@
 
   <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
   <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
   
@@ -31,12 +33,12 @@
             background: #f5f5f5;
         }
         .iconesMenu{
-            margin-top: 30px;
+            margin-top: 10%;
         }
 
         .iconesMenu i{
             font-size: 22px;
-            color:#CA408B;
+            color: #030303;
         }
 
         .iconesMenu .row{
@@ -63,14 +65,15 @@
         }
 
         .iconesMenu .row:hover p{
-            color: black!important;
+            color: #CA408B!important;
         }
 
         .iconesMenu .row:hover i{
-            color: black!important;
+            color: #CA408B!important;
         }
 
         .activeMenuPrivate{
+            transition: all 5s;
             box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
             align-self: center;
             border-radius: 30px;
@@ -81,33 +84,40 @@
 
         .activeMenuPrivate i{
             font-weight: 800;
-            color: black!important
+            color: #CA408B!important
         }
 
         .activeMenuPrivate p{
             font-weight: 800;
-            color: black!important;
+            color: #CA408B!important;
             padding-left: 5%!important;
         }
 
         .activeMenuPrivatePerfil p{
-            color: black!important;
+            color: #CA408B!important;
         }
 
         .activeMenuPrivatePerfil i{
-            color: black!important;
+            color: #CA408B!important;
         }
 
         .titlePrincipal{
             letter-spacing: 3px;
             font-weight: 800;
             font-size: 30px;
-            color: #444;
+            color: #030303;
         }
 
         .pMenu{
-            font-weight: 600;
-            color: #CA408B
+            font-weight: 500;
+            color: #030303;
+        }
+
+        .swal2-styled.swal2-confirm{
+            background: #ca408b!important;
+            color: white!important;
+            width: 30%!important;
+            border-radius: 9999px!important;
         }
     </style>
 
@@ -123,18 +133,18 @@
         <div class="col-xl-3" style="background: white;height: 100vh;position: fixed;">
             <aside style="padding: 12%; padding-left: 11%; padding-right: 7%;">
                 <a class="m-0 p-0 navbar-brand" href="{{ route('dashboard') }}">
-                    <p style="margin-bottom: 12%;color: black; font-weight: 800;"><span class="colorPatternPrimary">New</span><span style="text-shadow: 3px 3px #80008036;">Fisco</span></p>
+                    <p style="position: relative; left: -19px; bottom: 24px; margin-bottom: 12%;color: black; font-weight: 800;"><span class="colorPatternPrimary">New</span><span style="text-shadow: 3px 3px #80008036;">Fisco</span></p>
                 </a>
 
-                <hr class="colorPatternPrimary">
+                
 
                 <a href="{{ route('perfil') }}">
                     <div class="row @yield('perfil')">
                         <div class="col-xl-3">
                             @if(Auth::User()->permissao == 1)
-                                <i style="font-size: 35px;position: relative;top: 4px;left: 18px;" class="colorPatternPrimary fas fa-user-circle"></i>
+                                <i style="color: #030303; font-size: 35px;position: relative;top: 4px;left: 5px;" class="fas fa-user-circle"></i>
                             @else
-                                <i style="font-size: 35px;position: relative;top: 4px;left: 18px;" class="colorPatternPrimary fas fa-user-tie"></i>
+                                <i style="color: #030303; font-size: 35px;position: relative;top: 4px;left: 5px;" class="fas fa-user-tie"></i>
                             @endif
                         </div>
                         <div class="col-xl-9">
@@ -143,12 +153,12 @@
                             @else
                                 <p class="m-0 p-0" style="font-size: 12px; color: lightgray">Administrador</p>
                             @endif
-                            <p class="m-0" style="color: #CA408B; font-size: 16px; font-weight: 600;">{{ Auth::User()->nome }}</p>
+                            <p class="m-0" style="color: #030303; font-size: 16px; font-weight: 600;">{{ Auth::User()->nome }}</p>
                         </div>
                     </div>
                 </a>
 
-                <hr class="colorPatternPrimary">
+                <hr>
 
                 <div class="iconesMenu">
                     <a href="{{ route('dashboard') }}">
@@ -230,7 +240,29 @@
   </div>
 </footer>
 
-<script src="{{ asset('js/private.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        $('.loader').fadeOut().hide();
+
+        $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+        
+        @if(session('statusPositivo'))
+            Swal.fire(
+                '{{session('statusPositivo')}}',
+                '',
+                'success'
+            );
+        @endif
+
+        @if(session('statusNegativo'))
+            Swal.fire(
+                '{{session('statusNegativo')}}',
+                '',
+                'error'
+            );
+        @endif
+    });
+</script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 

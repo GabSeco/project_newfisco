@@ -53,7 +53,6 @@ class NotaController extends Controller
         $nota->imagem_path      = $nome;
 
         $nota->save();
-        
     }
 
     public function getNota(Request $req){
@@ -125,7 +124,7 @@ class NotaController extends Controller
 
         unlink(public_path('images\notas\\') . $nota->imagem_path);
         
-        return redirect('/admin/notas');
+        return redirect('/admin/notas')->with('statusPositivo', 'Nota Fiscal excluída com sucesso!');
     }
 
     public function notas(Request $req){
@@ -142,17 +141,11 @@ class NotaController extends Controller
     public function nota(request $request){
         $nota['quantidade'] = $nota['produto'] = $nota['entrada'] = $nota['saida'] = 0;
 
-        if($request->mes == 13){
-            $nota['quantidade'] = DB::select('select count(*) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-01-01') . '" and "' . date('Y-12-t') . '"');
-            $nota['produto']    = DB::select('select sum(quantidade) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-01-01') . '" and "' . date('Y-12-t') . '"');
-            $nota['entrada']    = DB::select('select sum(entrada) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-01-01') . '" and "' . date('Y-12-t') . '"');
-            $nota['saida']      = DB::select('select sum(saida) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-01-01') . '" and "' . date('Y-12-t') . '"');
-        } else {
-            $nota['quantidade'] = DB::select('select count(*) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-' . $request->mes . '-01') . '" and "' . date('Y-' . $request->mes . "-t") . '"');
-            $nota['produto']    = DB::select('select sum(quantidade) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-' . $request->mes . '-01') . '" and "' . date('Y-' . $request->mes . "-t") . '"');
-            $nota['entrada']    = DB::select('select sum(entrada) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-' . $request->mes . '-01') . '" and "' . date('Y-' . $request->mes . "-t") . '"');
-            $nota['saida']      = DB::select('select sum(saida) as total from notas where user = ' . Auth::User()->id . ' and data between "' . date('Y-' . $request->mes . '-01') . '" and "' . date('Y-' . $request->mes . "-t") . '"');
-        }
+        $nota['quantidade'] = DB::select('select count(*) as total from notas where user = ' . Auth::User()->id);
+        $nota['produto']    = DB::select('select sum(quantidade) as total from notas where user = ' . Auth::User()->id);
+        $nota['entrada']    = DB::select('select sum(entrada) as total from notas where user = ' . Auth::User()->id);
+        $nota['saida']      = DB::select('select sum(saida) as total from notas where user = ' . Auth::User()->id);
+        
         return response()->json($nota);
     }
 }

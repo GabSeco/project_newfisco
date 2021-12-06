@@ -22,6 +22,6 @@ class PerfilController extends Controller
             'login'     => $request->login,
         ]);
 
-        return redirect('admin/perfil')->with('status', 'ok');
+        return redirect('admin/perfil')->with('statusPositivo', 'Perfil atualizado com sucesso!');
     }
 }

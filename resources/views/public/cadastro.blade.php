@@ -49,24 +49,24 @@
                     <form method="post" action="{{ route('cadastrar') }}">
                         @csrf
 
-                        <h1>Cadastro</h1>
+                        <h1 style="font-weight: 700; letter-spacing: 3px;">Cadastro Empresa</h1>
 
-                        <div class="mt-5 mb-5 row">
+                        <div class="mt-5 mb-3 row">
                             <div class="col-xl-3">
                                 <div class="form-floating">
-                                    <input type="text" max="14" name="cnpj" class="cnpj form-control" placeholder="CNPJ">
+                                    <input type="text" max="14" name="cnpj" class="cnpj form-control" placeholder="CNPJ" required>
                                     <label for="cnpj">CNPJ</label>
                                 </div>
                             </div>
                             <div class="col-xl-3">
                                 <div class="form-floating">
-                                    <input type="text" max="14" name="inscricao" class="form-control" placeholder="Inscrição Estadual">
+                                    <input type="text" max="14" name="inscricao" class="form-control" placeholder="Inscrição Estadual" required>
                                     <label for="cnpj">Inscrição Estadual</label>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="form-floating">
-                                    <input type="text" name="razao" class="form-control" placeholder="Razão Social">
+                                    <input type="text" name="razao" class="form-control" placeholder="Razão Social" required>
                                     <label>Razão Social</label>
                                 </div>
                             </div>
@@ -75,63 +75,63 @@
                         <div class="mb-5 row">
                             <div class="col-xl-6">
                                 <div class="form-floating">
-                                    <input type="text" name="nome" class="form-control" placeholder="Nome Fantasia">
+                                    <input type="text" name="nome" class="form-control" placeholder="Nome Fantasia" required>
                                     <label>Nome Fantasia</label>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="form-floating">
-                                    <input type="text" name="nomeContato" class="form-control" placeholder="Nome Contato">
+                                    <input type="text" name="nomeContato" class="form-control" placeholder="Nome Contato" required>
                                     <label>Nome Contato</label>
                                 </div>
                             </div>
                         </div>
 
-                        <h3>Contato</h3>
+                        <h5 class="pt-3">Contato</h5>
 
                         <hr>
 
                         <div class="mb-5 row">
                             <div class="col-xl-8">
                                 <div class="form-floating">
-                                    <input type="text" name="email" class="form-control" placeholder="E-mail">
+                                    <input type="text" name="email" class="form-control" placeholder="E-mail" required>
                                     <label>E-mail</label>
                                 </div>
                             </div>
                             <div class="col-xl-4">
                                 <div class="form-floating">
-                                    <input type="text" name="telefoneContato" class="telefone form-control" placeholder="Telefone Contato">
+                                    <input type="text" name="telefoneContato" class="telefone form-control" placeholder="Telefone Contato" required>
                                     <label>Telefone Contato</label>
                                 </div>
                             </div>
                         </div>
 
-                        <h3>Endereço</h3>
+                        <h5 class="pt-3">Endereço</h5>
 
                         <hr>
 
-                        <div class="mb-5 row">
+                        <div class="mb-3 row">
                             <div class="col-xl-2">
                                 <div class="form-floating">
-                                    <input type="text" name="cep" class="cep form-control" placeholder="CEP" required>
+                                    <input type="text" name="cep" id="cep" onfocusout="pesquisacep(this.value)" class="cep form-control" placeholder="CEP" required>
                                     <label>CEP</label>
                                 </div>
                             </div>
                             <div class="col-xl-5">
                                 <div class="form-floating">
-                                    <input type="text" name="rua" class="form-control" placeholder="Rua" required>
+                                    <input type="text" name="rua" id="rua" class="form-control" placeholder="Rua" required>
                                     <label>Rua</label>
                                 </div>
                             </div>
                             <div class="col-xl-2">
                                 <div class="form-floating">
-                                    <input type="text" name="numero" class="numero" placeholder="Número" required>
+                                    <input type="text" name="numero" id="numero" class="form-control" placeholder="Número" required>
                                     <label>Número</label>
                                 </div>
                             </div>
                             <div class="col-xl-3">
                                 <div class="form-floating">
-                                    <input type="text" name="complemento" class="form-control" placeholder="Complemento">
+                                    <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Complemento">
                                     <label>Complemento</label>
                                 </div>
                             </div>
@@ -140,38 +140,38 @@
                         <div class="mb-5 row">
                             <div class="col-xl-4">
                                 <div class="form-floating">
-                                    <input type="text" name="bairro" class="form-control" placeholder="Bairro">
+                                    <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Bairro">
                                     <label>Bairro</label>
                                 </div>
                             </div>
                             <div class="col-xl-5">
                                 <div class="form-floating">
-                                    <input type="text" name="cidade" class="form-control" placeholder="Cidade">
+                                    <input type="text" name="cidade" id="cidade" class="form-control" placeholder="Cidade">
                                     <label>Cidade</label>
                                 </div>
                             </div>
                             <div class="col-xl-3">
                                 <div class="form-floating">
-                                    <input type="text" name="estado" class="form-control" placeholder="Estado">
+                                    <input type="text" name="estado" id="estado" class="form-control" placeholder="Estado">
                                     <label>Estado</label>
                                 </div>
                             </div>
                         </div>
 
-                        <h3>Acesso</h3>
+                        <h5 class="pt-3">Acesso</h5>
 
                         <hr>
 
                         <div class="mb-5 row">
                             <div class="col-xl-6">
                                 <div class="form-floating">
-                                    <input type="text" name="login" class="form-control" placeholder="Login">
+                                    <input type="text" name="login" class="form-control" placeholder="Login" required>
                                     <label>Login</label>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="form-floating">
-                                    <input type="text" name="senha" class="form-control" placeholder="Senha">
+                                    <input type="password" name="senha" class="form-control" placeholder="Senha" required>
                                     <label>Senha</label>
                                 </div>
                             </div>
