@@ -15,7 +15,7 @@
     </style>
 
     <h1 class="titlePrincipal">Dashboard</h1>
-    
+
     @if(Auth::User()->permissao == 1)
 
         @csrf
@@ -89,7 +89,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xl-10">
-                                <p class="titleDash"">Total Saída</p>
+                                <p class="titleDash">Total Saída</p>
                             </div>
                             <div class="col-xl-2 text-end">
                                 <i class="iconDash fas fa-dollar-sign"></i>
@@ -134,13 +134,13 @@
                 },
                 success: function(response){
                     $('#qtdNota').html(response.quantidade[0].total > 0 ? response.quantidade[0].total : 0);
-                    
+
                     $('#qtdProduto').html(response.produto[0].total > 0 ? response.produto[0].total : 0);
                     var entrada = parseFloat(response.entrada[0].total > 0 ? response.entrada[0].total : 0);
                     var saida = parseFloat(response.saida[0].total > 0 ? response.saida[0].total : 0);
                     $('#qtdEntrada').html(entrada.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
                     $('#qtdSaida').html(saida.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
-                    
+
                 }
             });
         }

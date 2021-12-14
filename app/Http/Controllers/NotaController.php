@@ -43,6 +43,7 @@ class NotaController extends Controller
         $nota->icms             = $xml->icms;
         $nota->valorTributado   = $xml->valorTributado;
         $nota->outras           = $xml->outras;
+        $nota->reducao          = $xml->reducao;
         $nota->aliquota         = $xml->aliquota;
         $nota->situacao         = $xml->situacao;
         $nota->codigo           = $xml->codigo;
@@ -51,6 +52,9 @@ class NotaController extends Controller
         $nota->baseIcmsSt       = $xml->baseIcmsSt;
         $nota->ipi              = $xml->ipi;
         $nota->imagem_path      = $nome;
+        $nota->cst              = $xml->cst;
+        $nota->ncm              = $xml->ncm;
+        $nota->unMedida         = $xml->unMedida;
 
         $nota->save();
     }
@@ -64,25 +68,34 @@ class NotaController extends Controller
     protected static function testeNota(string $file){
         //$file = "C:/xampp/htdocs/newfisco/public/images/notas/1637426245.xml";
         $xml = simplexml_load_file($file);
-        
+
         $totalQuantidade = 0;
-        $produtos = $quantidade = $cfo = $codigo = $valor = "";
+        $produtos = $quantidade = $cfop = $codigo = $valor = $aliquota = $ncm = $cst = $unMedida = "";
 
         foreach($xml->NFe->infNFe->det as $t){
             foreach($t->prod as $prod){
                 $totalQuantidade = $totalQuantidade + $prod->qCom;
-                $cfop            = $prod->CFOP;
 
                 if($produtos == ""){
                     $produtos   .= strval($prod->xProd);
-                    $quantidade .= strval($prod->qCom);
+                    $quantidade .= substr(strval($prod->qCom), 0, -1);
                     $codigo     .= strval($prod->cProd);
                     $valor      .= strval($prod->vUnTrib);
+                    $cfop       .= strval($prod->CFOP);
+                    $aliquota   .= substr(strval($t->imposto->ICMS->ICMS00->pICMS), 0, -2);
+                    $cst        .= strval($t->imposto->ICMS->ICMS00->CST);
+                    $ncm        .= strval($prod->NCM);
+                    $unMedida   .= strval($prod->uCom);
                 } else {
                     $produtos   .= "¬" . strval($prod->xProd);
-                    $quantidade .= "¬" . strval($prod->qCom);
+                    $quantidade .= "¬" . substr(strval($prod->qCom), 0, -1);
                     $codigo     .= "¬" . strval($prod->cProd);
                     $valor      .= "¬" . strval($prod->vUnTrib);
+                    $cfop       .= "¬" . strval($prod->CFOP);
+                    $aliquota   .= "¬" . substr(strval($t->imposto->ICMS->ICMS00->pICMS), 0, -2);
+                    $cst        .= "¬" . strval($t->imposto->ICMS->ICMS00->CST);
+                    $ncm        .= "¬" . strval($prod->NCM);
+                    $unMedida   .= "¬" . strval($prod->uCom);
                 }
             }
         }
@@ -90,11 +103,10 @@ class NotaController extends Controller
         $nota                   = new \stdClass();
         $nota->cnpj             = $xml->NFe->infNFe->emit->CNPJ;
         $nota->inscricao        = $xml->NFe->infNFe->emit->IE;
-        $nota->estado           = $xml->NFe->infNFe->emit->enderEmit->UF;
+        $nota->estado           = $xml->NFe->infNFe->dest->enderDest->UF;
         $nota->modelo           = $xml->NFe->infNFe->ide->mod;
         $nota->serie            = $xml->NFe->infNFe->ide->serie;
         $nota->numero           = $xml->NFe->infNFe->ide->nNF;
-        $nota->cfop             = $cfop;
         $nota->emitente         = $xml->NFe->infNFe->ide->tpNF == 0 ? "T" : "P";
         $nota->baseIcms         = str_replace('.','',$xml->NFe->infNFe->total->ICMSTot->vBC);
         $nota->icms             = $xml->NFe->infNFe->total->ICMSTot->vICMS;
@@ -103,19 +115,24 @@ class NotaController extends Controller
         $nota->ipi              = $xml->NFe->infNFe->total->ICMSTot->vIPI;
         $nota->valorTributado   = "0000000000000";
         $nota->outras           = "0000000000000";
-        $nota->aliquota         = "1900";
+        $nota->reducao          = "00000";
         $nota->situacao         = "N";
         $nota->totalQuantidade  = $totalQuantidade;
         $nota->quantidade       = $quantidade;
         $nota->produtos         = $produtos;
         $nota->codigo           = $codigo;
         $nota->valor            = $valor;
+        $nota->cfop             = $cfop;
+        $nota->aliquota         = $aliquota;
+        $nota->cst              = $cst;
+        $nota->ncm              = $ncm;
+        $nota->unMedida         = $unMedida;
         $nota->entrada          = $xml->NFe->infNFe->ide->tpNF == 0 ? $xml->NFe->infNFe->total->ICMSTot->vNF : 0;
         $nota->saida            = $xml->NFe->infNFe->ide->tpNF == 1 ? $xml->NFe->infNFe->total->ICMSTot->vNF : 0;
         $nota->data             = date('Y-m-d', strtotime($xml->NFe->infNFe->ide->dhEmi));
         return $nota;
         //print_r($nota);
-        
+
     }
 
     public function remove($id){
@@ -123,7 +140,7 @@ class NotaController extends Controller
         $nota->delete();
 
         unlink(public_path('images\notas\\') . $nota->imagem_path);
-        
+
         return redirect('/admin/notas')->with('statusPositivo', 'Nota Fiscal excluída com sucesso!');
     }
 
@@ -134,7 +151,7 @@ class NotaController extends Controller
         } else {
             $notas = Nota::all();
         }
-        
+
         return view('private.notas', ['notas' => $notas, 'mes' => $mes]);
     }
 
@@ -145,7 +162,7 @@ class NotaController extends Controller
         $nota['produto']    = DB::select('select sum(quantidade) as total from notas where user = ' . Auth::User()->id);
         $nota['entrada']    = DB::select('select sum(entrada) as total from notas where user = ' . Auth::User()->id);
         $nota['saida']      = DB::select('select sum(saida) as total from notas where user = ' . Auth::User()->id);
-        
+
         return response()->json($nota);
     }
 }

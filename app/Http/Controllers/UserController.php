@@ -37,7 +37,7 @@ class UserController extends Controller
         ]);
 
         if($bool){
-            return redirect('admin')->with('statusPositivo', 'Conta criada com sucesso!<br> Seja Bem-Vindo(a) a nossa plataforma :)');
+            return redirect('admin')->with('statusPositivo', 'Conta criada com sucesso! Seja Bem-Vindo(a) a nossa plataforma :)');
         }
 
         return redirect('login');
@@ -62,5 +62,5 @@ class UserController extends Controller
         return redirect('login');
     }
 
-    
+
 }
